@@ -1,24 +1,25 @@
-Este projeto implementa um dicionário bilíngue simples em C, utilizando uma lista duplamente encadeada para armazenar pares de palavras e suas respectivas traduções. Ele permite adicionar, buscar, remover e traduzir palavras, com um exemplo de uso no programa principal.
+This project implements a simple bilingual dictionary in C, using a doubly linked list to store pairs of words and their respective translations. It allows for adding, searching, removing, and translating words, with an example usage in the main program.
 
-Estrutura do Projeto
-dictionary.h: Definição da estrutura e funções do dicionário.
-main.c: Exemplo de uso do dicionário.
-Funcionalidades
-Inicialização do Dicionário
+### Project Structure
+- `dictionary.h`: Defines the structure and functions of the dictionary.
+- `main.c`: Example usage of the dictionary.
 
-inicializa_disc(): Cria e retorna um ponteiro para um nó inicial do dicionário.
-Inserção de Palavras
+### Functionalities
 
-inserir_palavra(): Insere uma nova palavra e sua tradução ao final da lista.
-Remoção de Palavras
+- **Dictionary Initialization**
+  - `inicializa_disc()`: Creates and returns a pointer to an initial node in the dictionary.
 
-remover_palavra(): Encontra e remove uma palavra do dicionário, ajustando os ponteiros dos nós adjacentes.
-Busca de Palavras
+- **Word Insertion**
+  - `inserir_palavra()`: Inserts a new word and its translation at the end of the list.
 
-buscar_palavra(): Retorna o nó correspondente à palavra especificada, se existir no dicionário.
-Impressão do Dicionário
+- **Word Removal**
+  - `remover_palavra()`: Finds and removes a word from the dictionary, adjusting the pointers of adjacent nodes.
 
-imprimir_dicionario(): Exibe todas as palavras e suas traduções presentes no dicionário.
-Tradução de Texto
+- **Word Search**
+  - `buscar_palavra()`: Returns the node corresponding to the specified word, if it exists in the dictionary.
 
-imprimir_texto(): Traduz palavras de uma string de texto usando o dicionário. As palavras não encontradas são exibidas sem tradução.
+- **Dictionary Printing**
+  - `imprimir_dicionario()`: Displays all words and their translations in the dictionary.
+
+- **Text Translation**
+  - `imprimir_texto()`: Translates words from a text string using the dictionary. Words not found are displayed without translation.
