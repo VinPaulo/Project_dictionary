@@ -1,5 +1,8 @@
+/* 
+strcspn conta caracteres de string1 até encontrar um de string2, retornando o índice do primeiro. 
+Usado para remover '\n' de entradas. 
+*/
 #include "dictionary.h"
-
 
 int main() {
     No* dicionario = inicializa_disc();
