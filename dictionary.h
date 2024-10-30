@@ -43,7 +43,7 @@ int inserir_palavra(No* prim_ref, char palavra[100], char trad[100]) {
 }
 
 No* remover_palavra(No* prim_ref, char palavra[100]) { 
-    No* aux = prim_ref;
+    No* aux = prim_ref; // ponteiro aux recebe a referência do primeiro nó.
 
     while (aux != NULL) {
         if (strcmp(aux->palavra, palavra) == 0) { // Verifica se a palavra do nó atual é a que deve ser removida
