@@ -14,7 +14,7 @@ typedef struct sNo {
 } No;
 
 No* inicializa_disc() {
-    No* novo = malloc(sizeof(No)); // inicializa um ponteiro para acessar o nó.
+    No* novo = (No*)malloc(sizeof(No)); // inicializa um ponteiro para acessar o nó.
     if (novo != NULL) { // verifica se a alocação foi bem sucedida.
         novo->ant = NULL; // o ponteiro aponta para o anterior e inicializa como nulo.
         novo->prox = NULL; // o ponteiro aponta para o próximo e inicializa como nulo.
@@ -25,7 +25,7 @@ No* inicializa_disc() {
 }
 
 int inserir_palavra(No* prim_ref, char palavra[100], char trad[100]) {
-    No* novo = malloc(sizeof(No)); // aloca memória para o nó novo.
+    No* novo = (No*)malloc(sizeof(No)); // aloca memória para o nó novo.
     if (novo == NULL) { // verifica se a alocação foi bem sucedida.
         return 1;
     }
@@ -43,12 +43,12 @@ int inserir_palavra(No* prim_ref, char palavra[100], char trad[100]) {
 }
 
 No* remover_palavra(No* prim_ref, char palavra[100]) { 
-    No* aux = prim_ref; // ponteiro aux recebe a referência do primeiro nó.
+    No* aux = prim_ref;
 
     while (aux != NULL) {
         if (strcmp(aux->palavra, palavra) == 0) { // Verifica se a palavra do nó atual é a que deve ser removida
             No* retira = aux; // Salva o nó a ser removido
-            if (retira->ant != NULL) { // Se não for a palavra desejada. 
+            if (retira->ant != NULL) { // Se não for o primeiro nó
                 retira->ant->prox = retira->prox; // Atualiza o próximo do nó anterior
             } else {
                 prim_ref = retira->prox; // Atualiza o início do dicionário se for a primeira palavra
@@ -57,10 +57,9 @@ No* remover_palavra(No* prim_ref, char palavra[100]) {
                 retira->prox->ant = retira->ant; // Atualiza o anterior do próximo nó
             }
             free(retira); // Libera a memória do nó removido
-            return prim_ref; // Retorna o novo início do dicionário
         } else {
-            aux = aux->prox; // Avança para o próximo nó   
-        }
+            aux = aux->prox; // Avança para o próximo nó
+        } 
     }
     return prim_ref; // Retorna o dicionário sem alterações se a palavra não for encontrada
 }
