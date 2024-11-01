@@ -81,8 +81,8 @@ No* remover_palavra(No* prim_ref, char palavra[100]){
             free(retira);
             break; // Libera a memória do nó removido
         }
-    return prim_ref; // Retorna o dicionário sem alterações se a palavra não for encontrada
     }
+    return prim_ref; // Retorna o dicionário sem alterações se a palavra não for encontrada
 }
 
 No* buscar_palavra(No* prim_ref, char palavra[100]){
