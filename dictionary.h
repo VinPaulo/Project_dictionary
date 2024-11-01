@@ -24,30 +24,52 @@ No* inicializa_disc() {
     return novo;
 }
 
-int inserir_palavra(No* prim_ref, char palavra[100], char trad[100]) {
-    No* novo = (No*)malloc(sizeof(No)); // aloca memória para o nó novo.
-    if (novo == NULL) { // verifica se a alocação foi bem sucedida.
-        return 1;
+No* inserir_palavra(No* prim_ref, char palavra[100], char trad[100]) {
+    No* novo = (No*)malloc(sizeof(No)); // aloca memória para o novo nó
+    if (novo == NULL) { // verifica falha na alocação
+        return NULL; // retorna NULL se falhar
     }
-    No* atual = prim_ref; // inicializa o nó atual recebendo a primeira referência (Primeiro Nó).
-    novo->palavra = strdup(palavra); // ponteiro novo aponta para palavra que recebe a função strdup como parâmetro 'palavra'.
-    novo->trad = strdup(trad); // ponteiro novo aponta para trad (tradução) e recebe como parâmetro o elemento de trad.
 
-    while (atual->prox != NULL) { // laço para percorrer a lista e encontrar o último elemento. atual aponta para próximo.
-        atual = atual->prox; // atual recebe atual apontando para próximo, ou seja, avança um nó.
+    novo->palavra = (char*)malloc(strlen(palavra) + 1); // aloca memória para 'palavra'
+    if (novo->palavra == NULL) { // verifica falha na alocação de 'palavra'
+        free(novo); // libera memória do nó
+        return NULL;
     }
-    atual->prox = novo; // atual apontando para próximo recebe novo, ou seja, o próximo do último nó aponta para novo.
-    novo->ant = atual; // o anterior do novo nó aponta para o nó atual.
-    novo->prox = NULL; // novo nó aponta para próximo que recebe nulo por ser o último da lista.
-    return 0;
+    strcpy(novo->palavra, palavra); // copia 'palavra' para o novo nó
+
+    novo->trad = (char*)malloc(strlen(trad) + 1); // aloca memória para 'trad'
+    if (novo->trad == NULL) { // verifica falha na alocação de 'trad'
+        free(novo->palavra); // libera memória de 'palavra'
+        free(novo); // libera memória do nó
+        return NULL;
+    }
+    strcpy(novo->trad, trad); // copia 'trad' para o novo nó
+
+    novo->prox = NULL; // inicializa o próximo como NULL
+    novo->ant = NULL;  // inicializa o anterior como NULL
+
+    if (prim_ref == NULL) { // se a lista estiver vazia
+        return novo; // retorna o novo nó como primeiro
+    }
+
+    No* atual = prim_ref; // define o nó atual como o primeiro
+    while (atual->prox != NULL) { // percorre até o último nó
+        atual = atual->prox;
+    }
+
+    atual->prox = novo; // o próximo do último nó aponta para o novo
+    novo->ant = atual;  // o anterior do novo aponta para o último
+    return prim_ref; // retorna a cabeça da lista
 }
 
-No* remover_palavra(No* prim_ref, char palavra[100]) { 
+
+No* remover_palavra(No* prim_ref, char palavra[100]){
     No* aux = prim_ref;
 
     while (aux != NULL) {
         if (strcmp(aux->palavra, palavra) == 0) { // Verifica se a palavra do nó atual é a que deve ser removida
-            No* retira = aux; // Salva o nó a ser removido
+            No* retira = aux;
+            aux = aux->prox; // Salva o nó a ser removido
             if (retira->ant != NULL) { // Se não for o primeiro nó
                 retira->ant->prox = retira->prox; // Atualiza o próximo do nó anterior
             } else {
@@ -56,15 +78,14 @@ No* remover_palavra(No* prim_ref, char palavra[100]) {
             if (retira->prox != NULL) { // Se não for o último nó
                 retira->prox->ant = retira->ant; // Atualiza o anterior do próximo nó
             }
-            free(retira); // Libera a memória do nó removido
-        } else {
-            aux = aux->prox; // Avança para o próximo nó
-        } 
-    }
+            free(retira);
+            break; // Libera a memória do nó removido
+        }
     return prim_ref; // Retorna o dicionário sem alterações se a palavra não for encontrada
+    }
 }
 
-No* buscar_palavra(No* prim_ref, char palavra[100]) {
+No* buscar_palavra(No* prim_ref, char palavra[100]){
     No* aux = prim_ref; // ponteiro auxiliar recebe o primeiro nó da lista.
     while (aux != NULL) { // percorre a lista enquanto aux for diferente de nulo.
         if (strcmp(aux->palavra, palavra) == 0) { // compara a palavra do nó com a palavra buscada.
@@ -75,25 +96,41 @@ No* buscar_palavra(No* prim_ref, char palavra[100]) {
     return NULL;
 }
 
-void imprimir_dicionario(No* prim_ref) {
-    No* aux = prim_ref; // ponteiro aux recebe o elemento do primeiro nó da lista. 
-    while (aux != NULL) { // verifica se aux é diferente de nulo.
-        if (aux->palavra != NULL && aux->trad != NULL) { // se aux apontando pra palavra e pra tradução for diferente de nulo imprime as strings.
-            printf("Idioma: %s / Traducao: %s\n", aux->palavra, aux->trad);
+void imprimir_dicionario(No* prim_ref){
+
+    if (prim_ref == NULL) { // verifica se a lista está vazia
+        printf("Dicionario vazio.\n"); // imprime mensagem se não houver palavras
+        return; // encerra a função se a lista estiver vazia
+    }
+
+    No* aux = prim_ref; // ponteiro auxiliar recebe o primeiro nó
+    while (aux != NULL) { // percorre a lista enquanto o ponteiro não for nulo
+        if (aux->palavra != NULL && aux->trad != NULL) { // verifica se há palavra e tradução
+            printf("Idioma: %s / Traducao: %s\n", aux->palavra, aux->trad); // imprime palavra e tradução
         }
-        aux = aux->prox; // aux percorre a lista.
+        aux = aux->prox; // avança para o próximo nó da lista
     }
 }
 
-void imprimir_texto(No* dicionario, char text[100]) {
-    char* token = strtok(text, " "); // função que divide strings em substrings.
-    while (token != NULL) { // verifica se token é nulo.
-        No* resultado = buscar_palavra(dicionario, token); // ponteiro resultado que recebe buscar palavra como parâmetro sua palavra e sua tradução.
-        if (resultado != NULL) { // verifica se o ponteiro resultado é nulo.
-            printf("%s ", resultado->trad); // imprime o resultado apontando para a tradução.
-        } else {
-            printf("%s ", token); // imprime a substring, ou seja, a palavra original.
-        }
-        token = strtok(NULL, " "); // continua a divisão da string.
+void imprimir_texto(No* dicionario, char text[100]){
+    if (dicionario == NULL || text == NULL) { // verifica se o dicionário ou o texto está vazio
+        printf("Dicionario ou texto vazio.\n"); // imprime mensagem se não houver dicionário ou texto
+        return; // encerra a função se o dicionário ou texto estiver vazio
     }
+
+    char* copia_texto = strdup(text); // faz uma cópia do texto original para evitar modificações
+    char* token = strtok(copia_texto, " "); // divide a cópia do texto em palavras (tokens)
+
+    while (token != NULL) { // percorre cada palavra da cópia do texto
+        No* resultado = buscar_palavra(dicionario, token); // busca a palavra no dicionário
+        if (resultado != NULL) { // verifica se a palavra foi encontrada no dicionário
+            printf("%s ", resultado->trad); // imprime a tradução se a palavra for encontrada
+        } else {
+            printf("%s ", token); // imprime a palavra original se não houver tradução
+        }
+        token = strtok(NULL, " "); // avança para a próxima palavra (token) do texto
+    }
+    printf("\n"); // pula linha após a impressão do texto
+
+    free(copia_texto); // libera a memória alocada para a cópia do texto
 }
